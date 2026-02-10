@@ -1,161 +1,193 @@
 <!DOCTYPE html>
 <html lang="no">
 <head>
-    <meta charset="UTF-8">
-    <title>Makerspace KKG – Bruksanvisninger</title>
+<meta charset="UTF-8">
+<title>Makerspace KKG – Bruksanvisninger</title>
 
-    <style>
-        :root {
-            --orange: #e89a3d;
-            --orange-dark: #d9862c;
-            --gray: #e6e6e6;
-        }
+<style>
+    :root {
+        --orange: #e89a3d;
+        --orange-dark: #d9862c;
+    }
 
-        * {
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+    * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-        body {
-            margin: 0;
-            background: #fff;
-        }
+    body {
+        margin: 0;
+        background: #fff;
+    }
 
-        /* ===== HEADER ===== */
-        header {
-            background: linear-gradient(120deg, #f2e3b3, #d46a55);
-            padding: 20px 30px;
-            display: flex;
-            align-items: center;
-        }
+    header {
+        padding: 20px 30px;
+        background: linear-gradient(120deg, #f2e3b3, #d46a55);
+    }
 
-        header h1 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: bold;
-        }
+    header h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
 
-        /* ===== GRID ===== */
-        .instructions-grid {
-            padding: 40px;
-            max-width: 1100px;
-            margin: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
+    /* ===== GRID ===== */
+    .instructions-grid {
+        padding: 40px;
+        max-width: 1100px;
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
 
-        /* ===== CARD ===== */
-        .instruction-card {
-            background: var(--orange);
-            border-radius: 4px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+    /* ===== CARD ===== */
+    .instruction-card {
+        background: var(--orange);
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-        .instruction-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 8px 14px rgba(0,0,0,0.3);
-        }
+    .instruction-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 14px rgba(0,0,0,0.3);
+    }
 
-        .instruction-content {
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-            flex: 1;
-        }
+    .instruction-content {
+        display: flex;
+        gap: 15px;
+        padding: 15px;
+        flex: 1;
+    }
 
-        /* ===== TEXT LEFT ===== */
-        .instruction-text {
-            width: 35%;
-        }
+    .instruction-text {
+        width: 35%;
+    }
 
-        .instruction-text h3 {
-            margin: 0 0 8px;
-            font-size: 16px;
-        }
+    .instruction-image {
+        width: 65%;
+    }
 
-        .instruction-text p {
-            margin: 0;
-            font-size: 13px;
-            line-height: 1.4;
-        }
+    .instruction-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-        /* ===== IMAGE RIGHT (STØRST) ===== */
-        .instruction-image {
-            width: 65%;
-        }
+    .instruction-footer {
+        text-align: center;
+        padding: 12px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        background: rgba(0,0,0,0.15);
+    }
 
-        .instruction-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 3px;
-        }
+    /* ===== MODAL GENERELT ===== */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+    }
 
-        /* ===== FOOTER ===== */
-        .instruction-footer {
-            text-align: center;
-            padding: 12px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            background: rgba(0,0,0,0.12);
-            transition: background 0.2s ease;
-        }
+    .modal-box {
+        background: #fff;
+        width: 85%;
+        max-width: 900px;
+        height: 85%;
+        border-radius: 6px;
+        position: relative;
+        overflow: hidden;
+    }
 
-        .instruction-card:hover .instruction-footer {
-            background: rgba(0,0,0,0.2);
-        }
-    </style>
+    .modal-box iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    /* ===== RAPPORT TANKBOKS ===== */
+    .report-bubble {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background: var(--orange);
+        padding: 15px 20px;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.35);
+        z-index: 1500;
+    }
+
+    .report-bubble::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        right: 20px;
+        width: 0;
+        height: 0;
+        border: 10px solid transparent;
+        border-top-color: var(--orange);
+    }
+
+    .report-bubble:hover {
+        background: var(--orange-dark);
+    }
+
+    /* ===== FORM ===== */
+    .report-form {
+        padding: 30px;
+    }
+
+    .report-form input,
+    .report-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    .report-form button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background: var(--orange);
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
 </head>
 <body>
 
 <header>
-    <h1>MAKERSPACE KKG</h1>
+    <img src="MS_logo.png" alt="Makerspace KKG Logo">
 </header>
 
 <main class="instructions-grid">
 
-    <!-- BOKS 1 -->
-    <div class="instruction-card" onclick="openGuide('3d-printer.pdf')">
+    <div class="instruction-card" onclick="openGuide('3d-printer.html')">
         <div class="instruction-content">
             <div class="instruction-text">
                 <h3>3D-printer</h3>
-                <p>Steg-for-steg bruksanvisning for trygg bruk.</p>
+                <p>Trygg bruk</p>
             </div>
             <div class="instruction-image">
-                <img src="https://via.placeholder.com/400x300" alt="3D printer">
-            </div>
-        </div>
-        <div class="instruction-footer">LES</div>
-    </div>
-
-    <!-- BOKS 2 -->
-    <div class="instruction-card" onclick="openGuide('laser.pdf')">
-        <div class="instruction-content">
-            <div class="instruction-text">
-                <h3>Laserkutter</h3>
-                <p>Sikkerhet og korrekt oppsett før bruk.</p>
-            </div>
-            <div class="instruction-image">
-                <img src="https://via.placeholder.com/400x300" alt="Laserkutter">
-            </div>
-        </div>
-        <div class="instruction-footer">LES</div>
-    </div>
-
-    <!-- BOKS 3 -->
-    <div class="instruction-card" onclick="openGuide('cnc.pdf')">
-        <div class="instruction-content">
-            <div class="instruction-text">
-                <h3>CNC-fres</h3>
-                <p>Grunnleggende bruk og vedlikehold.</p>
-            </div>
-            <div class="instruction-image">
-                <img src="https://via.placeholder.com/400x300" alt="CNC">
+                <img src="https://via.placeholder.com/400x300">
             </div>
         </div>
         <div class="instruction-footer">LES</div>
@@ -163,12 +195,59 @@
 
 </main>
 
+<!-- ===== GUIDE MODAL ===== -->
+<div id="guideModal" class="modal">
+    <div class="modal-box">
+        <span class="close" onclick="closeGuide()">×</span>
+        <iframe id="guideFrame"></iframe>
+    </div>
+</div>
+
+<!-- ===== RAPPORT BUBBLE ===== -->
+<div class="report-bubble" onclick="openReport()">
+    💬 Rapportér
+</div>
+
+<!-- ===== RAPPORT MODAL ===== -->
+<div id="reportModal" class="modal">
+    <div class="modal-box">
+        <span class="close" onclick="closeReport()">×</span>
+
+        <div class="report-form">
+            <h2>Rapportér et problem</h2>
+
+            <input type="text" placeholder="Tittel">
+            <textarea rows="5" placeholder="Beskriv problemet"></textarea>
+
+            <button>Send rapport</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function openGuide(file) {
-        // Bytt til riktig sti / PDF / side
-        alert("Åpner: " + file);
-        // window.open(file, "_blank");
+    function openGuide(page) {
+        document.getElementById("guideFrame").src = page;
+        document.getElementById("guideModal").style.display = "flex";
     }
+
+    function closeGuide() {
+        document.getElementById("guideModal").style.display = "none";
+        document.getElementById("guideFrame").src = "";
+    }
+
+    function openReport() {
+        document.getElementById("reportModal").style.display = "flex";
+    }
+
+    function closeReport() {
+        document.getElementById("reportModal").style.display = "none";
+    }
+
+    window.addEventListener("click", function(e) {
+        if (e.target.classList.contains("modal")) {
+            e.target.style.display = "none";
+        }
+    });
 </script>
 
 </body>
