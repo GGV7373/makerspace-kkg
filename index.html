@@ -2,12 +2,13 @@
 <html lang="no">
 <head>
     <meta charset="UTF-8">
-    <title>Makerspace KKG</title>
+    <title>Makerspace KKG – Bruksanvisninger</title>
+
     <style>
         :root {
             --orange: #e89a3d;
             --orange-dark: #d9862c;
-            --light-gray: #e6e6e6;
+            --gray: #e6e6e6;
         }
 
         * {
@@ -28,162 +29,145 @@
             align-items: center;
         }
 
-        header img {
-            height: 50px;
-            margin-right: 15px;
-        }
-
         header h1 {
-            font-size: 20px;
             margin: 0;
+            font-size: 20px;
             font-weight: bold;
         }
 
         /* ===== GRID ===== */
-        .container {
+        .instructions-grid {
             padding: 40px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 30px;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
         }
 
-        .card {
+        /* ===== CARD ===== */
+        .instruction-card {
             background: var(--orange);
             border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .instruction-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 14px rgba(0,0,0,0.3);
+        }
+
+        .instruction-content {
+            display: flex;
+            gap: 15px;
             padding: 15px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            flex: 1;
         }
 
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+        /* ===== TEXT LEFT ===== */
+        .instruction-text {
+            width: 35%;
         }
 
-        .card-content {
-            display: grid;
-            grid-template-columns: 60px 1fr;
-            grid-template-rows: 80px auto;
-            gap: 10px;
+        .instruction-text h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
         }
 
-        .placeholder-vertical {
-            grid-row: span 2;
-            background: var(--light-gray);
-            border-radius: 2px;
-        }
-
-        .placeholder-large {
-            background: var(--light-gray);
-            height: 80px;
-            border-radius: 2px;
-        }
-
-        .placeholder-small {
-            background: var(--light-gray);
-            height: 18px;
-            width: 60%;
-            border-radius: 2px;
-        }
-
-        /* ===== FLOATING BUTTON ===== */
-        .report-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: var(--orange);
-            color: #000;
-            border: none;
-            border-radius: 50%;
-            width: 90px;
-            height: 90px;
+        .instruction-text p {
+            margin: 0;
             font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            line-height: 1.4;
         }
 
-        .report-btn:hover {
-            background: var(--orange-dark);
+        /* ===== IMAGE RIGHT (STØRST) ===== */
+        .instruction-image {
+            width: 65%;
+        }
+
+        .instruction-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        /* ===== FOOTER ===== */
+        .instruction-footer {
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            background: rgba(0,0,0,0.12);
+            transition: background 0.2s ease;
+        }
+
+        .instruction-card:hover .instruction-footer {
+            background: rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body>
 
 <header>
-    <!-- Bytt src til ekte logo om du vil -->
-    <img src="https://via.placeholder.com/50" alt="Logo">
-    <h1>MAKERSPACE<br>KKG</h1>
+    <h1>MAKERSPACE KKG</h1>
 </header>
 
-<main class="container">
-    <!-- 6 kort -->
-    <div class="card" onclick="openCard(1)">
-        <div class="card-content">
-            <div class="placeholder-vertical"></div>
-            <div class="placeholder-large"></div>
-            <div class="placeholder-small"></div>
+<main class="instructions-grid">
+
+    <!-- BOKS 1 -->
+    <div class="instruction-card" onclick="openGuide('3d-printer.pdf')">
+        <div class="instruction-content">
+            <div class="instruction-text">
+                <h3>3D-printer</h3>
+                <p>Steg-for-steg bruksanvisning for trygg bruk.</p>
+            </div>
+            <div class="instruction-image">
+                <img src="https://via.placeholder.com/400x300" alt="3D printer">
+            </div>
         </div>
+        <div class="instruction-footer">LES</div>
     </div>
 
-    <div class="card" onclick="openCard(2)">
-        <div class="card-content">
-            <div class="placeholder-vertical"></div>
-            <div class="placeholder-large"></div>
-            <div class="placeholder-small"></div>
+    <!-- BOKS 2 -->
+    <div class="instruction-card" onclick="openGuide('laser.pdf')">
+        <div class="instruction-content">
+            <div class="instruction-text">
+                <h3>Laserkutter</h3>
+                <p>Sikkerhet og korrekt oppsett før bruk.</p>
+            </div>
+            <div class="instruction-image">
+                <img src="https://via.placeholder.com/400x300" alt="Laserkutter">
+            </div>
         </div>
+        <div class="instruction-footer">LES</div>
     </div>
 
-    <div class="card" onclick="openCard(3)">
-        <div class="card-content">
-            <div class="placeholder-vertical"></div>
-            <div class="placeholder-large"></div>
-            <div class="placeholder-small"></div>
+    <!-- BOKS 3 -->
+    <div class="instruction-card" onclick="openGuide('cnc.pdf')">
+        <div class="instruction-content">
+            <div class="instruction-text">
+                <h3>CNC-fres</h3>
+                <p>Grunnleggende bruk og vedlikehold.</p>
+            </div>
+            <div class="instruction-image">
+                <img src="https://via.placeholder.com/400x300" alt="CNC">
+            </div>
         </div>
+        <div class="instruction-footer">LES</div>
     </div>
 
-    <div class="card" onclick="openCard(4)">
-        <div class="card-content">
-            <div class="placeholder-vertical"></div>
-            <div class="placeholder-large"></div>
-            <div class="placeholder-small"></div>
-        </div>
-    </div>
-
-    <div class="card" onclick="openCard(5)">
-        <div class="card-content">
-            <div class="placeholder-vertical"></div>
-            <div class="placeholder-large"></div>
-            <div class="placeholder-small"></div>
-        </div>
-    </div>
-
-    <div class="card" onclick="openCard(6)">
-        <div class="card-content">
-            <div class="placeholder-vertical"></div>
-            <div class="placeholder-large"></div>
-            <div class="placeholder-small"></div>
-        </div>
-    </div>
 </main>
 
-<button class="report-btn" onclick="reportProblem()">
-    Rapportér<br>et problem
-</button>
-
 <script>
-    function openCard(id) {
-        alert("Klikket på kort " + id);
-        // Her kan du:
-        // window.location.href = "side.php?id=" + id;
-        // eller åpne modal
-    }
-
-    function reportProblem() {
-        alert("Åpne skjema for rapportering");
+    function openGuide(file) {
+        // Bytt til riktig sti / PDF / side
+        alert("Åpner: " + file);
+        // window.open(file, "_blank");
     }
 </script>
 
