@@ -163,3 +163,257 @@
         cursor: pointer;
         font-weight: bold;
     }
+
+/* Additional layout + admin styles */
+:root {
+    --card-scale: 1;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left img {
+    height: 60px;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.hidden { display: none; }
+
+.admin-panel {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    width: 420px;
+    max-width: calc(100% - 60px);
+    max-height: calc(100vh - 120px);
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1600;
+    overflow-y: auto;
+}
+
+.secondary-panel { border-left: 4px solid #3498db; }
+.head-panel { border-left: 4px solid #e74c3c; }
+
+.admin-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f6f6f6;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.admin-panel-header h3 { margin: 0; }
+
+.admin-tabs { display:flex; gap:0; flex-wrap: wrap; }
+.htab-btn { flex:1 1 auto; min-width:70px; padding:8px 4px; border:none; background:#f6f6f6; cursor:pointer; font-size:13px; }
+.htab-btn.active { background: var(--orange); color: #fff; }
+.admin-body { padding: 12px; }
+.admin-tab { padding: 6px 0; }
+
+/* Secondary admin task form */
+#secTaskForm select,
+#secTaskForm input,
+#secTaskForm textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+#secTaskForm button {
+    margin-top: 8px;
+    padding: 8px 16px;
+    background: var(--orange);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+#secTaskForm button:hover { background: var(--orange-dark); }
+
+.inventory-row { display:flex; gap:8px; align-items:center; padding:8px 0; border-bottom:1px solid #eee; }
+.inventory-row img { width:60px; height:40px; object-fit:cover; border-radius:4px; }
+.inventory-row input[type=number] { width:80px; }
+
+.problem-item { padding:8px; border:1px solid #eee; margin-bottom:8px; border-radius:6px; }
+.problem-item.resolved { opacity:0.6; text-decoration: line-through; }
+
+/* scale cards by variable */
+.instruction-card { transform: scale(var(--card-scale)); transform-origin: center top; }
+
+@media (max-width:600px) {
+    .header-left img { height:48px; }
+    .admin-panel { width: 95%; top: 120px; right: 10px; }
+}
+
+/* ===== TASK ITEMS ===== */
+.task-item { padding:8px; border:1px solid #eee; margin-bottom:8px; border-radius:6px; }
+.task-item.resolved { opacity:0.6; text-decoration: line-through; }
+
+/* ===== MANUAL EDITOR ===== */
+.manual-toolbar {
+    display: flex;
+    gap: 4px;
+    padding: 8px 0;
+    flex-wrap: wrap;
+}
+.manual-toolbar button {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    min-width: 30px;
+}
+.manual-toolbar button:hover { background: #eee; }
+
+.manual-editor {
+    border: 1px solid #ccc;
+    min-height: 250px;
+    padding: 12px;
+    border-radius: 4px;
+    overflow-y: auto;
+    max-height: 400px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+.manual-editor:focus { outline: 2px solid var(--orange); }
+
+.manual-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.manual-actions button {
+    padding: 6px 14px;
+    background: var(--orange);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+.manual-actions button:hover { background: var(--orange-dark); }
+
+.manual-content-display {
+    padding: 30px;
+    overflow-y: auto;
+    height: calc(100% - 40px);
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+#hManualsTab select {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* ===== IMAGE / FOLDER BROWSER ===== */
+.image-breadcrumbs { padding: 8px 0; font-size: 14px; }
+.breadcrumb-link { color: var(--orange-dark); text-decoration: underline; cursor: pointer; }
+
+.image-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.image-toolbar button {
+    padding: 6px 12px;
+    background: var(--orange);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 13px;
+}
+.image-toolbar button:hover { background: var(--orange-dark); }
+.storage-info { font-size: 12px; color: #888; margin-left: auto; }
+
+.folder-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.folder-item {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    width: 110px;
+    text-align: center;
+    cursor: pointer;
+}
+.folder-item:hover { background: #f9f9f9; }
+.folder-icon { font-size: 32px; }
+.folder-name { font-size: 13px; margin-top: 4px; word-break: break-word; }
+.folder-actions { margin-top: 6px; }
+.folder-actions button {
+    font-size: 11px;
+    padding: 2px 6px;
+    margin: 2px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px;
+}
+.image-item {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 6px;
+    text-align: center;
+}
+.image-item img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+.image-name { font-size: 11px; margin-top: 4px; word-break: break-word; }
+.image-actions { margin-top: 4px; }
+.image-actions button {
+    font-size: 11px;
+    padding: 2px 6px;
+    margin: 2px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+/* ===== GENERAL ADMIN BUTTONS ===== */
+.resolve-btn, .assign-btn, .resolve-task-btn, .delete-task-btn {
+    padding: 4px 10px;
+    border: none;
+    background: var(--orange);
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+}
+.resolve-btn:hover, .assign-btn:hover, .resolve-task-btn:hover { background: var(--orange-dark); }
+.delete-task-btn { background: #e74c3c; color: #fff; }
+.delete-task-btn:hover { background: #c0392b; }
