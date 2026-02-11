@@ -1,14 +1,7 @@
 // Frontend-only app logic for the main product page.
 
-// Sample product data (frontend). When connecting PHP/SQL later, replace fetches.
-const PRODUCTS = [
-    { id: 1, name: '3D-printer', img: 'https://via.placeholder.com/320x220?text=3D', manual: '3d-printer.html' },
-    { id: 2, name: 'Laser Cutter', img: 'https://via.placeholder.com/320x220?text=Laser', manual: 'laser.html' },
-    { id: 3, name: 'CNC Mill', img: 'https://via.placeholder.com/320x220?text=CNC', manual: 'cnc.html' },
-    { id: 4, name: 'Soldering Station', img: 'https://via.placeholder.com/320x220?text=Soldering', manual: 'solder.html' },
-    { id: 5, name: 'Vinyl Cutter', img: 'https://via.placeholder.com/320x220?text=Vinyl', manual: 'vinyl.html' },
-    { id: 6, name: 'Electronics Bench', img: 'https://via.placeholder.com/320x220?text=Electronics', manual: 'electronics.html' }
-];
+// Product data - fetched from backend API
+let PRODUCTS = [];
 
 // inventory and problems are stored in localStorage for the frontend demo
 const STORAGE_KEY = 'ms_frontend_state_v1';
@@ -65,6 +58,22 @@ function cleanupResolved(){
 }
 
 function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+// Fetch products from backend API
+async function loadProducts(){
+    try {
+        const response = await fetch('api/products.php');
+        if (!response.ok) {
+            throw new Error('Failed to fetch products');
+        }
+        PRODUCTS = await response.json();
+        console.log('Products loaded from API:', PRODUCTS);
+    } catch (error) {
+        console.error('Error loading products:', error);
+        // Fallback to empty array - products won't display without API
+        PRODUCTS = [];
+    }
+}
 
 // Render products grid
 function renderProducts(){
@@ -161,9 +170,12 @@ document.getElementById('scaleRange').addEventListener('input', (e)=>{
 });
 
 // Initialize
-loadState();
-renderProducts();
-wireReportForm();
+(async () => {
+    await loadProducts();
+    loadState();
+    renderProducts();
+    wireReportForm();
+})();
 
 // Expose some helpers globally so markup buttons still work
 window.openManualPreview = openManualPreview;
