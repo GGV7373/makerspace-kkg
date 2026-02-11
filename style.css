@@ -43,6 +43,7 @@
         display: flex;
         flex-direction: column;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
     }
 
     .instruction-card:hover {
@@ -77,6 +78,33 @@
         font-weight: bold;
         letter-spacing: 2px;
         background: rgba(0,0,0,0.15);
+    }
+
+    /* ===== INFO ICON ON CARD ===== */
+    .info-icon-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid rgba(0,0,0,0.3);
+        background: rgba(255,255,255,0.85);
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        transition: background 0.2s;
+        padding: 0;
+        font-style: italic;
+    }
+
+    .info-icon-btn:hover {
+        background: rgba(255,255,255,1);
+        border-color: rgba(0,0,0,0.5);
     }
 
     /* ===== MODAL GENERELT ===== */
@@ -417,3 +445,115 @@ header {
 .resolve-btn:hover, .assign-btn:hover, .resolve-task-btn:hover { background: var(--orange-dark); }
 .delete-task-btn { background: #e74c3c; color: #fff; }
 .delete-task-btn:hover { background: #c0392b; }
+
+/* ===== ADMIN LINK BUTTONS IN HEADER ===== */
+.admin-link-btn {
+    padding: 6px 14px;
+    background: rgba(0,0,0,0.15);
+    color: #000;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 13px;
+}
+.admin-link-btn:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+/* ===== LOGIN PAGE ===== */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px);
+}
+
+.login-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    max-width: 400px;
+    width: 100%;
+}
+
+.login-card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.login-card input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.login-card button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background: var(--orange);
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.login-card button:hover {
+    background: var(--orange-dark);
+}
+
+.login-error {
+    color: #e74c3c;
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 14px;
+    min-height: 20px;
+}
+
+/* ===== ADMIN ACCOUNTS TABLE ===== */
+.admin-accounts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.admin-accounts-table th,
+.admin-accounts-table td {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.admin-accounts-table th {
+    background: #f6f6f6;
+    font-weight: bold;
+}
+
+.add-admin-form input,
+.add-admin-form select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-admin-form button {
+    margin-top: 8px;
+    padding: 8px 16px;
+    background: var(--orange);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.add-admin-form button:hover {
+    background: var(--orange-dark);
+}

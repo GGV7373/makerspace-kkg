@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Brukermanual – Makerspace KKG</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .manual-page {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 30px 40px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .manual-page h2 {
+            border-bottom: 2px solid var(--orange);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .manual-page img {
+            max-width: 100%;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .manual-not-found {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .manual-not-found a {
+            color: var(--orange-dark);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" style="color:#000;text-decoration:none;font-weight:bold;">&larr; Tilbake til hovedsiden</a>
+        </div>
+        <div class="header-right">
+            <h2 id="manualTitle" style="margin:0;"></h2>
+        </div>
+    </header>
+    <main>
+        <article class="manual-page" id="manualContent"></article>
+        <div class="manual-not-found hidden" id="manualNotFound">
+            <h3>Ingen manual funnet</h3>
+            <p>Det er ikke opprettet noen brukermanual for dette utstyret enda.</p>
+            <a href="index.html">&larr; Tilbake til hovedsiden</a>
+        </div>
+    </main>
+
+    <script>
+    const PRODUCTS = [
+        { id: 1, name: '3D-printer' },
+        { id: 2, name: 'Laser Cutter' },
+        { id: 3, name: 'CNC Mill' },
+        { id: 4, name: 'Soldering Station' },
+        { id: 5, name: 'Vinyl Cutter' },
+        { id: 6, name: 'Electronics Bench' }
+    ];
+
+    const STORAGE_KEY = 'ms_frontend_state_v1';
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = Number(params.get('id'));
+
+    if(!productId){
+        window.location.href = 'index.html';
+    }
+
+    const raw = localStorage.getItem(STORAGE_KEY);
+    let state = { manuals: {} };
+    if(raw){
+        try { state = Object.assign(state, JSON.parse(raw)); } catch(e){}
+    }
+
+    const product = PRODUCTS.find(p => p.id === productId);
+    const content = state.manuals[productId];
+
+    if(product && content){
+        document.getElementById('manualTitle').textContent = product.name + ' - Brukermanual';
+        document.getElementById('manualContent').innerHTML = content;
+        document.title = product.name + ' – Brukermanual – Makerspace KKG';
+    } else {
+        document.getElementById('manualContent').classList.add('hidden');
+        document.getElementById('manualNotFound').classList.remove('hidden');
+        if(product){
+            document.getElementById('manualTitle').textContent = product.name;
+        }
+    }
+    </script>
+</body>
+</html>

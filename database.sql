@@ -24,6 +24,22 @@ CREATE TABLE IF NOT EXISTS products (
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Admin tasks
+CREATE TABLE IF NOT EXISTS admin_tasks (
+	id SERIAL PRIMARY KEY,
+	title VARCHAR(255) NOT NULL,
+	description TEXT,
+	status VARCHAR(50) NOT NULL DEFAULT 'OPEN' CHECK (status IN ('OPEN','IN_PROGRESS','DONE')),
+	created_by_admin_id INTEGER REFERENCES admins (id) ON DELETE SET NULL,
+	assigned_to_admin_id INTEGER REFERENCES admins (id) ON DELETE SET NULL,
+	visible_to_role VARCHAR(50) NOT NULL DEFAULT 'HEAD_ADMIN' CHECK (visible_to_role IN ('HEAD_ADMIN','INVENTORY_ADMIN')),
+	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+	updated_at TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS idx_admin_tasks_created_by ON admin_tasks (created_by_admin_id);
+CREATE INDEX IF NOT EXISTS idx_admin_tasks_assigned_to ON admin_tasks (assigned_to_admin_id);
+
 -- Inventory locations
 CREATE TABLE IF NOT EXISTS inventory_locations (
 	id SERIAL PRIMARY KEY,

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Innlogging – Makerspace KKG</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" style="color:#000;text-decoration:none;font-weight:bold;">&larr; Tilbake til hovedsiden</a>
+        </div>
+        <div class="header-right">
+            <h2 style="margin:0;">Admin Innlogging</h2>
+        </div>
+    </header>
+    <main>
+        <div class="login-container">
+            <div class="login-card">
+                <h2>Logg inn</h2>
+                <input type="text" id="loginUsername" placeholder="Brukernavn">
+                <input type="password" id="loginPassword" placeholder="Passord">
+                <p id="loginError" class="login-error"></p>
+                <button id="loginBtn">Logg inn</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script>
+    seedDefaultAdmin();
+
+    // If already logged in, redirect
+    const existingSession = getSession();
+    if(existingSession){
+        if(existingSession.role === 'HEAD_ADMIN') window.location.href = 'super_admin.html';
+        else window.location.href = 'secondary_admin.html';
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', doLogin);
+    document.getElementById('loginPassword').addEventListener('keydown', function(e){
+        if(e.key === 'Enter') doLogin();
+    });
+
+    function doLogin(){
+        const username = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const errorEl = document.getElementById('loginError');
+
+        if(!username || !password){
+            errorEl.textContent = 'Fyll inn brukernavn og passord.';
+            return;
+        }
+
+        const account = authenticate(username, password);
+        if(!account){
+            errorEl.textContent = 'Feil brukernavn eller passord.';
+            return;
+        }
+
+        setSession(account);
+
+        if(account.role === 'HEAD_ADMIN'){
+            window.location.href = 'super_admin.html';
+        } else {
+            window.location.href = 'secondary_admin.html';
+        }
+    }
+    </script>
+</body>
+</html>

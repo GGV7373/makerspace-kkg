@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <title>Sekundæradmin – Makerspace KKG</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-panel {
+            position: relative;
+            top: auto;
+            right: auto;
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto;
+            max-height: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" style="color:#000;text-decoration:none;font-weight:bold;">&larr; Tilbake til hovedsiden</a>
+        </div>
+        <div class="header-right">
+            <h2 style="margin:0;">Sekundæradmin</h2>
+            <button onclick="clearSession(); window.location.href='index.html';" class="admin-link-btn" style="margin-left:15px;">Logg ut</button>
+        </div>
+    </header>
+    <main>
+        <section class="admin-panel secondary-panel">
+            <div class="admin-body">
+                <h4>Inventar</h4>
+                <div id="secInventoryList"></div>
+                <hr>
+                <h4>Tildel oppgave til hovedadmin</h4>
+                <div id="secTaskForm">
+                    <select id="secTaskProduct"></select>
+                    <input type="text" id="secTaskTitle" placeholder="Oppgavetittel">
+                    <textarea id="secTaskDesc" rows="3" placeholder="Beskrivelse"></textarea>
+                    <button id="secTaskSubmit">Send oppgave</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="auth.js"></script>
+    <script>
+    // ===== AUTH GUARD =====
+    if(!requireAuth(['HEAD_ADMIN', 'INVENTORY_ADMIN'])) throw new Error('Not authorized');
+    // ===== SHARED DATA =====
+    const PRODUCTS = [
+        { id: 1, name: '3D-printer', img: 'https://via.placeholder.com/320x220?text=3D', manual: '3d-printer.html' },
+        { id: 2, name: 'Laser Cutter', img: 'https://via.placeholder.com/320x220?text=Laser', manual: 'laser.html' },
+        { id: 3, name: 'CNC Mill', img: 'https://via.placeholder.com/320x220?text=CNC', manual: 'cnc.html' },
+        { id: 4, name: 'Soldering Station', img: 'https://via.placeholder.com/320x220?text=Soldering', manual: 'solder.html' },
+        { id: 5, name: 'Vinyl Cutter', img: 'https://via.placeholder.com/320x220?text=Vinyl', manual: 'vinyl.html' },
+        { id: 6, name: 'Electronics Bench', img: 'https://via.placeholder.com/320x220?text=Electronics', manual: 'electronics.html' }
+    ];
+
+    const STORAGE_KEY = 'ms_frontend_state_v1';
+    let state = {
+        inventory: {},
+        problems: [],
+        tasks: [],
+        manuals: {},
+        imageFolders: [],
+        images: []
+    };
+
+    function loadState(){
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw){
+            try{ state = Object.assign(state, JSON.parse(raw)); } catch(e){ console.warn('Could not parse state', e); }
+            const secTasks = state.problems.filter(p => p.from === 'secondary');
+            if(secTasks.length > 0){
+                secTasks.forEach(t => {
+                    if(!state.tasks.find(x => x.id === t.id)){
+                        state.tasks.push(t);
+                    }
+                });
+                state.problems = state.problems.filter(p => p.from !== 'secondary');
+                saveState();
+            }
+        } else {
+            PRODUCTS.forEach(p => state.inventory[p.id] = 1);
+            state.problems.push({id:1, title:'Bed heater error (3D)', desc:'Varmer slår seg av etter 2 min', status:'open', from:'user'});
+        }
+        state.problems.forEach(p => { if(p.status === 'resolved' && !p.resolvedAt) p.resolvedAt = new Date().toISOString(); });
+        state.tasks.forEach(t => { if(t.status === 'resolved' && !t.resolvedAt) t.resolvedAt = new Date().toISOString(); });
+        cleanupResolved();
+    }
+
+    function cleanupResolved(){
+        const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
+        const now = Date.now();
+        const pLen = state.problems.length;
+        state.problems = state.problems.filter(p => {
+            if(p.status === 'resolved' && p.resolvedAt) return (now - new Date(p.resolvedAt).getTime()) < TWO_DAYS;
+            return true;
+        });
+        const tLen = state.tasks.length;
+        state.tasks = state.tasks.filter(t => {
+            if(t.status === 'resolved' && t.resolvedAt) return (now - new Date(t.resolvedAt).getTime()) < TWO_DAYS;
+            return true;
+        });
+        if(state.problems.length !== pLen || state.tasks.length !== tLen) saveState();
+    }
+
+    function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+    // ===== SECONDARY ADMIN RENDERING =====
+    function renderSecondaryAdmin(){
+        const inv = document.getElementById('secInventoryList');
+        inv.innerHTML = '';
+        PRODUCTS.forEach(p => {
+            const row = document.createElement('div');
+            row.className = 'inventory-row';
+            row.innerHTML = `
+                <img src="${p.img}" alt="${p.name}">
+                <div style="flex:1">
+                    <div><strong>${p.name}</strong></div>
+                    <div><input type="number" min="0" data-id="${p.id}" value="${state.inventory[p.id] ?? 0}"></div>
+                </div>
+            `;
+            inv.appendChild(row);
+        });
+
+        // Inventory change handlers
+        inv.querySelectorAll('input[type=number]').forEach(inp => inp.addEventListener('change', ()=>{
+            const id = Number(inp.getAttribute('data-id'));
+            state.inventory[id] = Number(inp.value);
+            saveState();
+        }));
+
+        // Populate product dropdown for task form
+        const select = document.getElementById('secTaskProduct');
+        select.innerHTML = PRODUCTS.map(p => '<option value="' + p.id + '">' + p.name + '</option>').join('');
+
+        // Task submit handler
+        document.getElementById('secTaskSubmit').addEventListener('click', ()=>{
+            const productId = Number(document.getElementById('secTaskProduct').value);
+            const title = document.getElementById('secTaskTitle').value.trim();
+            const desc = document.getElementById('secTaskDesc').value.trim();
+            if(!title){ alert('Skriv inn en tittel'); return; }
+
+            state.tasks.push({
+                id: Date.now(),
+                title: title,
+                desc: desc || 'Opprettet fra sekundaeradmin',
+                status: 'open',
+                from: 'secondary',
+                productId: productId,
+                createdAt: new Date().toISOString()
+            });
+            saveState();
+            document.getElementById('secTaskTitle').value = '';
+            document.getElementById('secTaskDesc').value = '';
+            alert('Oppgave sendt til hovedadmin!');
+        });
+    }
+
+    // ===== INIT =====
+    loadState();
+    renderSecondaryAdmin();
+    </script>
+</body>
+</html>
