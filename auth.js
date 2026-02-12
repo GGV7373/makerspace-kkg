@@ -20,8 +20,8 @@ function seedDefaultAdmin(){
     if(accounts.length === 0){
         accounts.push({
             id: 1,
-            username: 'admin',
-            password: 'admin123',
+            username: 'KKGIT',
+            password: 'Adminpwd123',
             fullName: 'Superadministrator',
             role: 'HEAD_ADMIN',
             isActive: true,
