@@ -117,17 +117,42 @@ function renderProducts(){
     });
 }
 
-// Navigate to manual page
-function openManualPreview(productId){
+// Open manual in modal from database
+async function openManualPreview(productId){
     const product = PRODUCTS.find(p => p.id === productId);
-    const content = state.manuals[productId];
-
-    if(!content){
-        alert('Ingen manual er opprettet for ' + product.name + ' enda.');
+    
+    if(!product){
+        alert('Produkt ikke funnet');
         return;
     }
 
-    window.location.href = 'manual.html?id=' + productId;
+    try {
+        const response = await fetch(`api/manual.php?id=${productId}`);
+        if(!response.ok) {
+            throw new Error('Failed to fetch manual');
+        }
+        
+        const data = await response.json();
+        const manualContent = document.getElementById('manualContent');
+        
+        manualContent.innerHTML = `
+            <div class="manual-header">
+                <h2>${data.name} – Bruksanvisning</h2>
+            </div>
+            <div class="manual-body">
+                ${data.content}
+            </div>
+        `;
+        
+        document.getElementById('manualModal').style.display = 'flex';
+    } catch (error) {
+        console.error('Error loading manual:', error);
+        alert('Kunne ikke laste bruksanvisning for ' + product.name);
+    }
+}
+
+function closeManualModal(){
+    document.getElementById('manualModal').style.display = 'none';
 }
 
 // Report modal
@@ -142,26 +167,39 @@ window.addEventListener('click', function(e){
 function wireReportForm(){
     const submitBtn = document.getElementById('reportSubmitBtn');
     if(!submitBtn) return;
-    submitBtn.addEventListener('click', ()=>{
-        const title = document.getElementById('reportTitle').value.trim();
-        const desc = document.getElementById('reportDesc').value.trim();
-        if(!title){ alert('Skriv inn en tittel'); return; }
+    submitBtn.addEventListener('click', submitReport);
+}
 
-        state.problems.push({
-            id: Date.now(),
-            title: title,
-            desc: desc,
-            status: 'open',
-            from: 'user',
-            createdAt: new Date().toISOString()
+async function submitReport(){
+    const title = document.getElementById('reportTitle').value.trim();
+    const desc = document.getElementById('reportDesc').value.trim();
+    
+    if(!title){ 
+        alert('Skriv inn en tittel'); 
+        return; 
+    }
+
+    try {
+        const response = await fetch('api/reports.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                reporter_name: 'Anonym',
+                about_text: title + ' - ' + desc,
+                status: 'NEW'
+            })
         });
-        saveState();
-
+        
+        if(!response.ok) throw new Error('Failed to submit report');
+        
         document.getElementById('reportTitle').value = '';
         document.getElementById('reportDesc').value = '';
         closeReport();
         alert('Rapport sendt! Takk for tilbakemeldingen.');
-    });
+    } catch (error) {
+        console.error(error);
+        alert('Kunne ikke sende rapport');
+    }
 }
 
 // Scale control

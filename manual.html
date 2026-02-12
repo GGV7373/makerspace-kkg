@@ -5,52 +5,338 @@
     <title>Brukermanual – Makerspace KKG</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        :root {
+            --orange: #e89a3d;
+            --orange-dark: #d9862c;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            padding: 20px 30px;
+            background: linear-gradient(120deg, #f2e3b3, #d46a55);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1, header h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
+
         .manual-page {
-            max-width: 800px;
+            max-width: 900px;
             margin: 30px auto;
-            padding: 30px 40px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            padding: 40px 45px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             line-height: 1.8;
-            font-size: 16px;
+            font-size: 15px;
+            color: #444;
         }
+
         .manual-page h2 {
-            border-bottom: 2px solid var(--orange);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            border-bottom: 3px solid var(--orange);
+            padding-bottom: 15px;
+            margin: 40px 0 20px 0;
+            color: var(--orange);
+            font-size: 28px;
+            margin-top: 0;
         }
+
+        .manual-page h2:first-child {
+            margin-top: 0;
+        }
+
+        .manual-page h3 {
+            color: var(--orange-dark);
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 18px;
+            border-left: 4px solid var(--orange);
+            padding-left: 12px;
+        }
+
+        .manual-page h4 {
+            color: #333;
+            margin-top: 18px;
+            margin-bottom: 10px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .manual-page p {
+            margin: 12px 0;
+            line-height: 1.8;
+        }
+
         .manual-page img {
             max-width: 100%;
-            border-radius: 4px;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 1px solid #f0f0f0;
+        }
+
+        .manual-page img.float-left {
+            float: left;
+            margin: 0 20px 15px 0;
+            max-width: 350px;
+        }
+
+        .manual-page img.float-right {
+            float: right;
+            margin: 0 0 15px 20px;
+            max-width: 350px;
+        }
+
+        .manual-page ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .manual-page ul li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .manual-page ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        .manual-page ol li {
             margin: 10px 0;
+            line-height: 1.6;
         }
-        .manual-not-found {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-        .manual-not-found a {
+
+        .manual-page strong {
             color: var(--orange-dark);
             font-weight: bold;
+        }
+
+        .manual-page code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c33;
+        }
+
+        .manual-page blockquote {
+            background: #fffbf5;
+            border-left: 4px solid var(--orange);
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #666;
+        }
+
+        .manual-page .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            color: #555;
+        }
+
+        .manual-page .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            color: #856404;
+        }
+
+        .manual-page .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            color: #155724;
+        }
+
+        .manual-page table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .manual-page table th {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .manual-page table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .manual-page table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .manual-not-found {
+            text-align: center;
+            padding: 80px 40px;
+            color: #999;
+            background: white;
+            border-radius: 12px;
+            margin: 30px auto;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .manual-not-found h3 {
+            font-size: 24px;
+            color: #666;
+            border: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+
+        .manual-not-found p {
+            color: #999;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .manual-not-found a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(232, 154, 61, 0.3);
+        }
+
+        .manual-not-found a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(232, 154, 61, 0.4);
+        }
+
+        .manual-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .manual-nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .manual-nav a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(232, 154, 61, 0.3);
+        }
+
+        .manual-toc {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            max-width: 300px;
+            float: right;
+            margin-left: 20px;
+        }
+
+        .manual-toc h4 {
+            margin-top: 0;
+            color: var(--orange);
+        }
+
+        .manual-toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .manual-toc li {
+            margin: 5px 0;
+        }
+
+        .manual-toc a {
+            color: var(--orange-dark);
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .manual-toc a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .manual-page {
+                margin: 15px;
+                padding: 20px;
+            }
+
+            .manual-page img.float-left,
+            .manual-page img.float-right {
+                float: none;
+                margin: 15px 0;
+                max-width: 100%;
+            }
+
+            .manual-toc {
+                float: none;
+                margin: 20px 0 0 0;
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="header-left">
-            <a href="index.html" style="color:#000;text-decoration:none;font-weight:bold;">&larr; Tilbake til hovedsiden</a>
+            <a href="index.html" style="color:white;text-decoration:none;font-weight:bold;display:flex;align-items:center;gap:8px;">
+                <span style="font-size:18px">←</span> Tilbake til hovedsiden
+            </a>
         </div>
         <div class="header-right">
-            <h2 id="manualTitle" style="margin:0;"></h2>
+            <h2 id="manualTitle" style="margin:0;color:white;"></h2>
         </div>
     </header>
     <main>
         <article class="manual-page" id="manualContent"></article>
-        <div class="manual-not-found hidden" id="manualNotFound">
-            <h3>Ingen manual funnet</h3>
-            <p>Det er ikke opprettet noen brukermanual for dette utstyret enda.</p>
-            <a href="index.html">&larr; Tilbake til hovedsiden</a>
+        <div class="manual-not-found" id="manualNotFound" style="display:none">
+            <h3>😕 Ingen manual funnet</h3>
+            <p>Det er ikke opprettet noen detaljert brukermanual for dette utstyret enda.</p>
+            <p style="font-size:13px;color:#999">Kontakt superadmin hvis du synes det burde være en manual her!</p>
+            <a href="index.html">← Tilbake til hovedsiden</a>
         </div>
     </main>
 
@@ -85,10 +371,12 @@
     if(product && content){
         document.getElementById('manualTitle').textContent = product.name + ' - Brukermanual';
         document.getElementById('manualContent').innerHTML = content;
+        document.getElementById('manualContent').style.display = 'block';
+        document.getElementById('manualNotFound').style.display = 'none';
         document.title = product.name + ' – Brukermanual – Makerspace KKG';
     } else {
-        document.getElementById('manualContent').classList.add('hidden');
-        document.getElementById('manualNotFound').classList.remove('hidden');
+        document.getElementById('manualContent').style.display = 'none';
+        document.getElementById('manualNotFound').style.display = 'block';
         if(product){
             document.getElementById('manualTitle').textContent = product.name;
         }

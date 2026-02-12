@@ -51,20 +51,36 @@
             errorEl.textContent = 'Fyll inn brukernavn og passord.';
             return;
         }
+        // Try server-side authentication first
+        (async () => {
+            try {
+                const resp = await fetch('api/auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
 
-        const account = authenticate(username, password);
-        if(!account){
-            errorEl.textContent = 'Feil brukernavn eller passord.';
-            return;
-        }
+                if (resp.ok) {
+                    const account = await resp.json();
+                    setSession(account);
+                    if(account.role === 'HEAD_ADMIN') window.location.href = 'super_admin.html';
+                    else window.location.href = 'secondary_admin.html';
+                    return;
+                }
+            } catch (err) {
+                console.warn('Server auth unavailable, falling back to local auth', err);
+            }
 
-        setSession(account);
-
-        if(account.role === 'HEAD_ADMIN'){
-            window.location.href = 'super_admin.html';
-        } else {
-            window.location.href = 'secondary_admin.html';
-        }
+            // Fallback to local authentication
+            const account = authenticate(username, password);
+            if(!account){
+                errorEl.textContent = 'Feil brukernavn eller passord.';
+                return;
+            }
+            setSession(account);
+            if(account.role === 'HEAD_ADMIN') window.location.href = 'super_admin.html';
+            else window.location.href = 'secondary_admin.html';
+        })();
     }
     </script>
 </body>

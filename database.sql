@@ -1,5 +1,6 @@
 /* Simple Inventory & Reporting schema derived from the ERD
 	 - PostgreSQL-flavored DDL
+	 - For MySQL, use: LONGTEXT instead of TEXT for large fields
 */
 
 -- Admins
@@ -20,6 +21,7 @@ CREATE TABLE IF NOT EXISTS products (
 	name VARCHAR(255) NOT NULL,
 	description TEXT,
 	unit VARCHAR(50),
+	image_url LONGTEXT,
 	is_active BOOLEAN NOT NULL DEFAULT TRUE,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -86,4 +88,45 @@ CREATE TABLE IF NOT EXISTS reports (
 -- Indexes to help lookups
 CREATE INDEX IF NOT EXISTS idx_inventory_stock_product ON inventory_stock (product_id);
 CREATE INDEX IF NOT EXISTS idx_inventory_stock_location ON inventory_stock (location_id);
+
+-- Printable Items (t-shirts, hoodies, etc. for printing)
+CREATE TABLE IF NOT EXISTS printable_items (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(255) NOT NULL,
+	description TEXT,
+	category VARCHAR(100),
+	image_url LONGTEXT,
+	price DECIMAL(10, 2),
+	is_active BOOLEAN NOT NULL DEFAULT TRUE,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Printable Items Inventory
+CREATE TABLE IF NOT EXISTS printable_inventory (
+	id SERIAL PRIMARY KEY,
+	item_id INTEGER NOT NULL REFERENCES printable_items (id) ON DELETE CASCADE,
+	size VARCHAR(50),
+	color VARCHAR(100),
+	quantity INTEGER NOT NULL DEFAULT 0,
+	reorder_level INTEGER DEFAULT 10,
+	updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+	updated_by_admin_id INTEGER REFERENCES admins (id) ON DELETE SET NULL,
+	UNIQUE KEY unique_item_size_color (item_id, size, color)
+);
+
+-- Printable Items Transaction Log
+CREATE TABLE IF NOT EXISTS printable_transactions (
+	id SERIAL PRIMARY KEY,
+	item_id INTEGER NOT NULL REFERENCES printable_items (id) ON DELETE CASCADE,
+	size VARCHAR(50),
+	color VARCHAR(100),
+	qty_change INTEGER NOT NULL,
+	reason VARCHAR(100),
+	notes TEXT,
+	performed_by_admin_id INTEGER REFERENCES admins (id) ON DELETE SET NULL,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_printable_inventory_item ON printable_inventory (item_id);
+CREATE INDEX IF NOT EXISTS idx_printable_transactions_item ON printable_transactions (item_id);
 
