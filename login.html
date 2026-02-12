@@ -34,7 +34,7 @@
     const existingSession = getSession();
     if(existingSession){
         if(existingSession.role === 'HEAD_ADMIN') window.location.href = 'super_admin.html';
-        else window.location.href = 'secondary_admin.html';
+        else window.location.href = 'laerere.html';
     }
 
     document.getElementById('loginBtn').addEventListener('click', doLogin);
@@ -64,7 +64,7 @@
                     const account = await resp.json();
                     setSession(account);
                     if(account.role === 'HEAD_ADMIN') window.location.href = 'super_admin.html';
-                    else window.location.href = 'secondary_admin.html';
+                    else window.location.href = 'laerere.html';
                     return;
                 }
             } catch (err) {
@@ -79,7 +79,7 @@
             }
             setSession(account);
             if(account.role === 'HEAD_ADMIN') window.location.href = 'super_admin.html';
-            else window.location.href = 'secondary_admin.html';
+            else window.location.href = 'laerere.html';
         })();
     }
     </script>
