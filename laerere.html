@@ -2,7 +2,7 @@
 <html lang="no">
 <head>
     <meta charset="UTF-8">
-    <title>Sekundæradmin – Makerspace KKG</title>
+    <title>Lærere – Makerspace KKG</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .admin-panel {
@@ -22,7 +22,7 @@
             <a href="index.html" style="color:#000;text-decoration:none;font-weight:bold;">&larr; Tilbake til hovedsiden</a>
         </div>
         <div class="header-right">
-            <h2 style="margin:0;">Sekundæradmin</h2>
+            <h2 style="margin:0;">Lærere</h2>
             <button onclick="clearSession(); window.location.href='index.html';" class="admin-link-btn" style="margin-left:15px;">Logg ut</button>
         </div>
     </header>
@@ -34,23 +34,23 @@
                 
                 <h4 style="margin-top:25px;border-left:4px solid var(--orange);padding-left:15px">📦 Instruksjonsprodukter</h4>
                 <p style="color:#999;font-size:13px;margin-bottom:15px">Vanlige produkter som 3D-printere, laser cutters osv.</p>
-                <div id="secInventoryList"></div>
+                <div id="laerInventoryList"></div>
                 
                 <hr style="margin: 40px 0;border:none;border-top:2px solid #eee">
                 
                 <h4 style="margin-top:25px;border-left:4px solid var(--orange);padding-left:15px">👕 Trykkbare varer</h4>
                 <p style="color:#999;font-size:13px;margin-bottom:15px">T-skjorter, hettegensere, caps og andre trykkbare varer per størrelse og farge.</p>
-                <div id="secPrintableList" style="margin-bottom:20px;"></div>
+                <div id="laerPrintableList" style="margin-bottom:20px;"></div>
                 
                 <hr style="margin: 40px 0;border:none;border-top:2px solid #eee">
                 
                 <h4 style="margin-top:25px;border-left:4px solid var(--orange);padding-left:15px">✉️ Tildel oppgave til superadmin</h4>
                 <p style="color:#999;font-size:13px;margin-bottom:15px">Send en oppgave eller forespørsel som superadmin skal utføre.</p>
-                <div id="secTaskForm" class="admin-form" style="max-width:600px">
-                    <select id="secTaskProduct" style="margin-bottom:10px"></select>
-                    <input type="text" id="secTaskTitle" placeholder="Oppgavetittel (f.eks: Bestill mer papir til laseren)" style="margin-bottom:10px">
-                    <textarea id="secTaskDesc" rows="3" placeholder="Beskrivelse eller detaljer (valgfritt)" style="margin-bottom:10px;resize:vertical"></textarea>
-                    <button id="secTaskSubmit" style="margin:0">📤 Send oppgave</button>
+                <div id="laerTaskForm" class="admin-form" style="max-width:600px">
+                    <select id="laerTaskProduct" style="margin-bottom:10px"></select>
+                    <input type="text" id="laerTaskTitle" placeholder="Oppgavetittel (f.eks: Bestill mer papir til laseren)" style="margin-bottom:10px">
+                    <textarea id="laerTaskDesc" rows="3" placeholder="Beskrivelse eller detaljer (valgfritt)" style="margin-bottom:10px;resize:vertical"></textarea>
+                    <button id="laerTaskSubmit" style="margin:0">📤 Send oppgave</button>
                 </div>
             </div>
         </section>
@@ -141,7 +141,7 @@
 
     // ===== SECONDARY ADMIN RENDERING =====
     function renderSecondaryAdmin(){
-        const inv = document.getElementById('secInventoryList');
+        const inv = document.getElementById('laerInventoryList');
         inv.innerHTML = '';
         if(PRODUCTS.length === 0){
             inv.innerHTML = '<div style="text-align:center;padding:30px;color:#999;background:#f9f9f9;border-radius:4px">📭 Ingen produkter funnet</div>';
@@ -176,14 +176,14 @@
         renderPrintableItems();
 
         // Populate product dropdown for task form
-        const select = document.getElementById('secTaskProduct');
+        const select = document.getElementById('laerTaskProduct');
         select.innerHTML = PRODUCTS.map(p => '<option value="' + p.id + '">' + p.name + '</option>').join('');
 
         // Task submit handler
-        document.getElementById('secTaskSubmit').addEventListener('click', async ()=>{
-            const productId = Number(document.getElementById('secTaskProduct').value);
-            const title = document.getElementById('secTaskTitle').value.trim();
-            const desc = document.getElementById('secTaskDesc').value.trim();
+        document.getElementById('laerTaskSubmit').addEventListener('click', async ()=>{
+            const productId = Number(document.getElementById('laerTaskProduct').value);
+            const title = document.getElementById('laerTaskTitle').value.trim();
+            const desc = document.getElementById('laerTaskDesc').value.trim();
             if(!title){ alert('Skriv inn en tittel'); return; }
 
             try {
@@ -198,8 +198,8 @@
                 
                 if(!response.ok) throw new Error('Failed to submit task');
                 
-                document.getElementById('secTaskTitle').value = '';
-                document.getElementById('secTaskDesc').value = '';
+                document.getElementById('laerTaskTitle').value = '';
+                document.getElementById('laerTaskDesc').value = '';
                 alert('✅ Oppgave sendt til superadmin!');
             } catch (error) {
                 console.error(error);
@@ -210,7 +210,7 @@
 
     // Render printable items (t-shirts, hoodies, etc.)
     async function renderPrintableItems(){
-        const container = document.getElementById('secPrintableList');
+        const container = document.getElementById('laerPrintableList');
         container.innerHTML = '';
         
         if (PRINTABLE_ITEMS.length === 0) {
